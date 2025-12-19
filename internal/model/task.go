@@ -26,6 +26,53 @@ const (
 	StatusDone       Status = "done"
 )
 
+// GroupBy represents the grouping criteria for tasks
+type GroupBy int
+
+const (
+	GroupByNone GroupBy = iota
+	GroupByStatus
+	GroupByPriority
+	GroupByTag
+)
+
+// AllGroupBy returns all available grouping options
+func AllGroupBy() []GroupBy {
+	return []GroupBy{GroupByNone, GroupByStatus, GroupByPriority, GroupByTag}
+}
+
+// Label returns the French label for a grouping option
+func (g GroupBy) Label() string {
+	switch g {
+	case GroupByNone:
+		return "Aucun"
+	case GroupByStatus:
+		return "État"
+	case GroupByPriority:
+		return "Priorité"
+	case GroupByTag:
+		return "Tag"
+	default:
+		return "Aucun"
+	}
+}
+
+// Next cycles to the next grouping option
+func (g GroupBy) Next() GroupBy {
+	switch g {
+	case GroupByNone:
+		return GroupByStatus
+	case GroupByStatus:
+		return GroupByPriority
+	case GroupByPriority:
+		return GroupByTag
+	case GroupByTag:
+		return GroupByNone
+	default:
+		return GroupByNone
+	}
+}
+
 // Task represents a single todo item
 type Task struct {
 	ID          string    `yaml:"id"`
@@ -137,5 +184,21 @@ func (p Priority) Next() Priority {
 		return PriorityLow
 	default:
 		return PriorityMedium
+	}
+}
+
+// Index returns the index of the priority
+func (p Priority) Index() int {
+	switch p {
+	case PriorityLow:
+		return 0
+	case PriorityMedium:
+		return 1
+	case PriorityHigh:
+		return 2
+	case PriorityCritical:
+		return 3
+	default:
+		return 1
 	}
 }

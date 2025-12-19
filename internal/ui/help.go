@@ -92,6 +92,7 @@ func (h *HelpPanel) Render() string {
 				desc string
 			}{
 				{"Tab", "Changer de vue"},
+				{"g", "Changer le groupage"},
 				{"/", "Rechercher"},
 				{"o", "Ouvrir le fichier YAML"},
 				{"r", "Rafraîchir"},
@@ -164,6 +165,7 @@ func RenderFooter(styles Styles, isKanban bool) string {
 	addItem("a", "ajouter")
 	addItem("d", "supprimer")
 	addItem("1-4", "état")
+	addItem("g", "grouper")
 	addItem("Tab", "vue")
 	addItem("?", "aide")
 	addItem("q", "quitter")

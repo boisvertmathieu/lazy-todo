@@ -271,6 +271,15 @@ func (a *App) handleNormalKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		} else {
 			a.viewMode = ViewList
 		}
+	case key.Matches(msg, a.keys.GroupBy):
+		// Cycle through grouping modes
+		if a.viewMode == ViewList {
+			a.listView.CycleGroupBy()
+			a.setMessage("Grouper par: " + a.listView.GetGroupBy().Label())
+		} else {
+			a.kanbanView.CycleGroupBy()
+			a.setMessage("Grouper par: " + a.kanbanView.GetGroupBy().Label())
+		}
 	case key.Matches(msg, a.keys.Search):
 		a.searchInput.SetValue("")
 		a.searchInput.Focus()
@@ -568,6 +577,20 @@ func (a *App) renderHeader() string {
 		Italic(true).
 		Render(filePath)
 
+	// Grouping indicator
+	var groupBy model.GroupBy
+	if a.viewMode == ViewList {
+		groupBy = a.listView.GetGroupBy()
+	} else {
+		groupBy = a.kanbanView.GetGroupBy()
+	}
+	var groupInfo string
+	if groupBy != model.GroupByNone {
+		groupInfo = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#cba6f7")).
+			Render(" [" + groupBy.Label() + "]")
+	}
+
 	// View tabs
 	listTab := a.styles.HeaderTab
 	kanbanTab := a.styles.HeaderTab
@@ -583,7 +606,7 @@ func (a *App) renderHeader() string {
 	count := fmt.Sprintf("%d tâches", len(a.tasks))
 	countStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("#a6adc8"))
 
-	leftSide := title + "  " + fileInfo
+	leftSide := title + "  " + fileInfo + groupInfo
 	rightSide := countStyle.Render(count) + "  " + tabs
 
 	// Calculate spacing

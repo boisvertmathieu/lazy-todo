@@ -28,6 +28,7 @@ type KeyMap struct {
 
 	// Views
 	ToggleView key.Binding
+	GroupBy    key.Binding
 	Search     key.Binding
 	OpenEditor key.Binding
 	Help       key.Binding
@@ -121,6 +122,10 @@ func DefaultKeyMap() KeyMap {
 			key.WithKeys("tab"),
 			key.WithHelp("tab", "changer vue"),
 		),
+		GroupBy: key.NewBinding(
+			key.WithKeys("g"),
+			key.WithHelp("g", "grouper"),
+		),
 		Search: key.NewBinding(
 			key.WithKeys("/"),
 			key.WithHelp("/", "rechercher"),
@@ -177,7 +182,7 @@ func (k KeyMap) FullHelp() [][]key.Binding {
 		{k.Up, k.Down, k.Left, k.Right},
 		{k.Add, k.Edit, k.Delete, k.Priority},
 		{k.StatusTodo, k.StatusInProgress, k.StatusBlocked, k.StatusDone},
-		{k.ToggleView, k.Search, k.OpenEditor, k.Help},
-		{k.MoveLeft, k.MoveRight, k.Refresh, k.Quit},
+		{k.ToggleView, k.GroupBy, k.Search, k.OpenEditor},
+		{k.MoveLeft, k.MoveRight, k.Refresh, k.Help, k.Quit},
 	}
 }
